@@ -1,4 +1,5 @@
 {
+  "include": ["src", "commitlint.config.mjs"],
   "compilerOptions": {
     "module": "nodenext",
     "moduleResolution": "nodenext",
@@ -16,7 +17,7 @@
     "rootDir": "./",
     "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"],
+      "@/*": ["src/*"]
     },
     "incremental": true,
     "skipLibCheck": true,
