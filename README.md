@@ -63,3 +63,32 @@
 - ІО-36 Варшавський Тимур – [**[varshavskiy05]**](https://github.com/varshavskiy05)
 - ІО-36 Плешу Андрій – [**[Ripper-del]**](https://github.com/Ripper-del)
 - ІО-36 Карлик Максим – [**[ypichev]**](https://github.com/ypichev)
+
+
+##LAB2
+
+- ІО-36 Варшавський Тимур
+- Створення питання:
+- [CreateQuestion]('assets/CreateQuestion.jpg')
+
+___
+
+- Відповідь на питання:
+- [answer]('assets/answear.jpg')
+
+___
+
+- Прийняття питання:
+- [acceptAnswer]('assets/acceptAnswear.jpg')
+
+___
+
+- Завантаження вкладень:
+- [uploadAttachment]('assets/uploadAttachment.jpg')
+
+___
+
+- Notifications:
+- [inAppNotifications]('assets/inAppNotifications.jpg')
+
+___
