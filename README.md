@@ -69,7 +69,7 @@
 
 - ІО-36 Варшавський Тимур
 - Створення питання:
-- [CreateQuestion](assets/CreateQuestion.jpg)
+- ![CreateQuestion](assets/CreateQuestion.jpg)
 
 ___
 
