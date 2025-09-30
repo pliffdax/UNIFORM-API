@@ -84,7 +84,7 @@ ___
 ___
 
 - Завантаження вкладень:
-- ![uploadAttachment]('assets/uploadAttachment.jpg)
+- ![uploadAttachment](assets/uploadAttachment.jpg)
 
 ___
 
