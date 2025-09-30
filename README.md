@@ -79,16 +79,16 @@ ___
 ___
 
 - Прийняття питання:
-- ![acceptAnswer](assets/acceptAnswear.jpg)
+- ![acceptAnswer](assets/accpetAnswear.jpg)
 
 ___
 
 - Завантаження вкладень:
-- ![uploadAttachment]('ssets/uploadAttachment.jpg)
+- ![uploadAttachment]('assets/uploadAttachment.jpg)
 
 ___
 
 - Notifications:
-- ![inAppNotifications](assets/inAppNotifications.jpg)
+- ![inAppNotifications](assets/uploadAttachment.jpg)
 
 ___
