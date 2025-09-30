@@ -137,6 +137,9 @@
 ---
 
 - ІО-36 Плешу Андрій
+
+---
+
 - Компонентна діограма:
 - ![сomponent_diagram](assets/сomponent_diagram.jpg)
 
