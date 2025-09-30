@@ -1,9 +1,11 @@
-# NODA 
+# NODA
 
-## Ідея 
-Ми створюємо Q&A-платформу **[NODA]** (аналог StackOverflow/Quora), орієнтовану на студентів та початківців-розробників.   
+## Ідея
+
+Ми створюємо Q&A-платформу **[NODA]** (аналог StackOverflow/Quora), орієнтовану на студентів та початківців-розробників.
 
 Ключові можливості:
+
 - створення запитань та відповідей;
 - пошук по темах;
 - додавання тегів;
@@ -17,9 +19,10 @@
 
 ---
 
-## Технологічний стек 
+## Технологічний стек
 
-### Backend 
+### Backend
+
 - **Node.js 20 LTS + TypeScript (ESM, NodeNext)**
 - **NestJS 10+** — модульна архітектура, DI, Guards, Pipes, Interceptors
 - **Prisma ORM**
@@ -36,7 +39,8 @@
 
 ---
 
-### Frontend 
+### Frontend
+
 - **Next.js 14+ (App Router)**
 - **React 18 + TypeScript**
 - **TailwindCSS** — стилізація
@@ -47,7 +51,8 @@
 
 ---
 
-### Інфраструктура 
+### Інфраструктура
+
 - **Docker + docker-compose**
 - **NGINX** — реверс-проксі, HTTPS
 - **CI/CD**: GitHub Actions
@@ -58,12 +63,12 @@
 
 ---
 
-## Команда 
+## Команда
+
 - ІО-35 Степанов Олександр **[TEAM LEAD]** – [**[pliffdax]**](https://github.com/pliffdax)
 - ІО-36 Варшавський Тимур – [**[varshavskiy05]**](https://github.com/varshavskiy05)
 - ІО-36 Плешу Андрій – [**[Ripper-del]**](https://github.com/Ripper-del)
 - ІО-36 Карлик Максим – [**[ypichev]**](https://github.com/ypichev)
-
 
 ## LAB2
 
@@ -71,49 +76,60 @@
 - Створення питання:
 - ![CreateQuestion](assets/CreateQuestion.jpg)
 
-___
+---
 
 - Відповідь на питання:
 - ![answer](assets/answear.jpg)
 
-___
+---
 
 - Прийняття питання:
 - ![acceptAnswer](assets/accpetAnswear.jpg)
 
-___
+---
 
 - Завантаження вкладень:
 - ![uploadAttachment](assets/uploadAttachment.jpg)
 
-___
+---
 
 - Повідомлення:
 - ![inAppNotifications](assets/uploadAttachment.jpg)
 
-___
+---
+
 - ІО-36 Карлик Максим
-___
+
+---
 
 - Оновлення профілю:
 - ![ProfileUpdate](assets/profile_update.jpg)
 
-___
+---
 
 - Голосування:
 - ![Voting](assets/voting.jpg)
 
-___
+---
 
 - Аггрегація при перегляді питання:
 - ![AggregationForViewing](assets/aggregation_for_viewing.jpg)
 
-___
+---
 
 - Аггрегація для профілю користувача:
 - ![AggregationForProfile](assets/aggregation_for_profile.jpg)
 
-___
+---
 
 - Вибірка «активних питань»:
 - ![SelectionOfActiveQuestions](assets/selection.jpg)
+
+---
+
+- ІО-35 Степанов Олександр Олександрович
+
+---
+
+- ER Модель:
+- ![ERModel](assets/ER.jpg)
