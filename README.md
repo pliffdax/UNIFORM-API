@@ -92,6 +92,8 @@ ___
 - ![inAppNotifications](assets/uploadAttachment.jpg)
 
 ___
+- ІО-36 Карлик Максим
+___
 
 - Оновлення профілю:
 - ![ProfileUpdate](assets/profile_update.jpg)
