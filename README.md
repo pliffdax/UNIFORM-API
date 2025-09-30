@@ -134,7 +134,10 @@
 - ER Модель:
 - ![ERModel](assets/ER.jpg)
 
+---
 
 - ІО-36 Плешу Андрій
 - Компонентна діограма:
-- ![Component diagram](assets/Component diagram.jpg)
+- ![сomponent_diagram](assets/сomponent_diagram.jpg)
+
+---
