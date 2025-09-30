@@ -88,7 +88,30 @@ ___
 
 ___
 
-- Notifications:
+- Повідомлення:
 - ![inAppNotifications](assets/uploadAttachment.jpg)
 
 ___
+
+- Оновлення профілю:
+- ![ProfileUpdate](assets/profile_update.jpg)
+
+___
+
+- Голосування:
+- ![Voting](assets/voting.jpg)
+
+___
+
+- Аггрегація при перегляді питання:
+- ![AggregationForViewing](assets/aggregation_for_viewing.jpg)
+
+___
+
+- Аггрегація для профілю користувача:
+- ![AggregationForProfile](assets/aggregation_for_profile.jpg)
+
+___
+
+- Вибірка «активних питань»:
+- ![SelectionOfActiveQuestions](assets/selection.jpg)
