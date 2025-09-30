@@ -69,26 +69,26 @@
 
 - ІО-36 Варшавський Тимур
 - Створення питання:
-- [CreateQuestion]('assets/CreateQuestion.jpg')
+- [CreateQuestion](assets/CreateQuestion.jpg)
 
 ___
 
 - Відповідь на питання:
-- [answer]('assets/answear.jpg')
+- [answer](assets/answear.jpg)
 
 ___
 
 - Прийняття питання:
-- [acceptAnswer]('assets/acceptAnswear.jpg')
+- [acceptAnswer](assets/acceptAnswear.jpg)
 
 ___
 
 - Завантаження вкладень:
-- [uploadAttachment]('assets/uploadAttachment.jpg')
+- [uploadAttachment]('ssets/uploadAttachment.jpg)
 
 ___
 
 - Notifications:
-- [inAppNotifications]('assets/inAppNotifications.jpg')
+- [inAppNotifications](assets/inAppNotifications.jpg)
 
 ___
