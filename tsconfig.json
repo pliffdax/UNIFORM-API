@@ -1,30 +1,26 @@
 {
   "include": ["src", "commitlint.config.mjs"],
   "compilerOptions": {
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
-    "resolvePackageJsonExports": true,
+    "module": "commonjs",
+    "target": "ES2020",
+
+    "baseUrl": ".",
+    "paths": { "@/*": ["src/*"] },
+
+    "rootDir": "src",
+    "outDir": "dist",
+
     "esModuleInterop": true,
-    "isolatedModules": true,
-    "declaration": true,
-    "removeComments": true,
+    "allowSyntheticDefaultImports": true,
+
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "ES2023",
-    "sourceMap": true,
-    "outDir": "./dist",
-    "rootDir": "./",
-    "baseUrl": "./",
-    "paths": {
-      "@/*": ["src/*"]
-    },
-    "incremental": true,
+
+    "isolatedModules": false,
+    "declaration": true,
+    "removeComments": true,
     "skipLibCheck": true,
     "strictNullChecks": true,
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false
+    "forceConsistentCasingInFileNames": true
   }
 }
