@@ -1,98 +1,146 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# NODA
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Ідея
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Ми створюємо Q&A-платформу **[NODA]** (аналог StackOverflow/Quora), орієнтовану на студентів та початківців-розробників.
 
-## Description
+Ключові можливості:
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- створення запитань та відповідей;
+- пошук по темах;
+- додавання тегів;
+- лайки та репости;
+- прийняття найкращої відповіді;
+- редагування власних постів;
+- профіль користувача з аватаркою та описом;
+- сейви (збереження обраних постів);
+- підписка на теги;
+- система ролей і верифікації (студент → підтверджений користувач → модератор).
 
-## Project setup
+---
 
-```bash
-$ pnpm install
-```
+## Технологічний стек
 
-## Compile and run the project
+### Backend
 
-```bash
-# development
-$ pnpm run start
+- **Node.js 20 LTS + TypeScript (ESM, NodeNext)**
+- **NestJS 10+** — модульна архітектура, DI, Guards, Pipes, Interceptors
+- **Prisma ORM**
+- **PostgreSQL** — основна база даних
+- **Redis** — кеш, черги, токени
+- **Meilisearch** — пошук (з можливістю міграції на Elasticsearch)
+- **JWT + Passport.js** — автентифікація
+- **BullMQ (Redis)** — фонові завдання
+- **Socket.IO** — реальний час (нотифікації)
+- **S3-сумісне сховище** (MinIO / AWS S3) — файли та аватарки
+- **Swagger** — документація API
+- **pino** — логування
+- **nestjs-i18n** — локалізація відповідей та помилок
 
-# watch mode
-$ pnpm run start:dev
+---
 
-# production mode
-$ pnpm run start:prod
-```
+### Frontend
 
-## Run tests
+- **Next.js 14+ (App Router)**
+- **React 18 + TypeScript**
+- **TailwindCSS** — стилізація
+- **Zustand / Redux Toolkit** — state management
+- **React Query (TanStack)** — робота з API
+- **next-i18next** — багатомовність інтерфейсу
+- **MDX / Markdown renderer** — форматування відповідей
 
-```bash
-# unit tests
-$ pnpm run test
+---
 
-# e2e tests
-$ pnpm run test:e2e
+### Інфраструктура
 
-# test coverage
-$ pnpm run test:cov
-```
+- **Docker + docker-compose**
+- **NGINX** — реверс-проксі, HTTPS
+- **CI/CD**: GitHub Actions
+- **Хостинг**: Railway (MVP) або VPS (Hetzner, DigitalOcean)
+- **Prometheus + Grafana** (опційно) — моніторинг
+- **pgBackRest / pg_dump** — бекапи PostgreSQL
+- **Meilisearch dumps** — бекапи пошуку
 
-## Deployment
+---
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+## Команда
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+- ІО-35 Степанов Олександр **[TEAM LEAD]** – [**[pliffdax]**](https://github.com/pliffdax)
+- ІО-36 Варшавський Тимур – [**[varshavskiy05]**](https://github.com/varshavskiy05)
+- ІО-36 Плешу Андрій – [**[Ripper-del]**](https://github.com/Ripper-del)
+- ІО-36 Карлик Максим – [**[ypichev]**](https://github.com/ypichev)
 
-```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
-```
+## LAB2
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+- ІО-36 Варшавський Тимур
+- Створення питання:
+- ![CreateQuestion](assets/CreateQuestion.jpg)
 
-## Resources
+---
 
-Check out a few resources that may come in handy when working with NestJS:
+- Відповідь на питання:
+- ![answer](assets/answear.jpg)
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+---
 
-## Support
+- Прийняття питання:
+- ![acceptAnswer](assets/accpetAnswear.jpg)
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+---
 
-## Stay in touch
+- Завантаження вкладень:
+- ![uploadAttachment](assets/uploadAttachment.jpg)
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+---
 
-## License
+- Повідомлення:
+- ![inAppNotifications](assets/uploadAttachment.jpg)
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+---
+
+- ІО-36 Карлик Максим
+
+---
+
+- Оновлення профілю:
+- ![ProfileUpdate](assets/profile_update.jpg)
+
+---
+
+- Голосування:
+- ![Voting](assets/voting.jpg)
+
+---
+
+- Аггрегація при перегляді питання:
+- ![AggregationForViewing](assets/aggregation_for_viewing.jpg)
+
+---
+
+- Аггрегація для профілю користувача:
+- ![AggregationForProfile](assets/aggregation_for_profile.jpg)
+
+---
+
+- Вибірка «активних питань»:
+- ![SelectionOfActiveQuestions](assets/selection.jpg)
+
+---
+
+- ІО-35 Степанов Олександр Олександрович
+
+---
+
+- ER Модель:
+- ![ERModel](assets/ER.jpg)
+
+---
+
+- ІО-36 Плешу Андрій
+
+---
+
+- Компонентна діограма:
+- ![сomponent_diagram](assets/сomponent_diagram.jpg)
+
+---
