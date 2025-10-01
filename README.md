@@ -141,6 +141,6 @@
 ---
 
 - Компонентна діограма:
-- ![сomponent_diagram](assets/сomponent_diagram.png)
+- ![сomponent_diagram](assets/сomponent_diagram.jpg)
 
 ---
