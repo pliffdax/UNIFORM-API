@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Param, Body } from '@nestjs/common';
 import { ProfileService } from './profile.service';
+import { Prisma } from '../../generated/prisma';
 
 @Controller('profiles')
 export class ProfileController {
@@ -20,8 +21,16 @@ export class ProfileController {
     return this.profileService.getProfileByUserId(Number(userId));
   }
 
+  @Post('create')
+  createProfile(@Body() newProfile: Prisma.UserProfileCreateInput) {
+    return this.profileService.createProfile(newProfile);
+  }
+
   @Post('update/:id')
-  updateProfile(@Param('id') id: number, @Body() updatedProfile: Partial<any>) {
+  updateProfile(
+    @Param('id') id: number,
+    @Body() updatedProfile: Prisma.UserProfileUpdateInput,
+  ) {
     return this.profileService.updateProfile(Number(id), updatedProfile);
   }
 
