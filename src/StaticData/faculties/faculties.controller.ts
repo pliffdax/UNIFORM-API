@@ -1,13 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Put,
-  Delete,
-  Body,
-  Param,
-  Query,
-} from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { FacultiesService } from './faculties.service';
 import { CreateFacultyDto, UpdateFacultyDto } from './faculties.interface';
 
@@ -16,30 +7,27 @@ export class FacultiesController {
   constructor(private readonly facultiesService: FacultiesService) {}
 
   @Get()
-  async findAll(@Query() query: any) {
-    return this.facultiesService.findAll(query);
+  findAll() {
+    return this.facultiesService.findAll();
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: string) {
     return this.facultiesService.findOne(+id);
   }
 
   @Post()
-  async create(@Body() createFacultyDto: CreateFacultyDto) {
+  create(@Body() createFacultyDto: CreateFacultyDto) {
     return this.facultiesService.create(createFacultyDto);
   }
 
   @Put(':id')
-  async update(
-    @Param('id') id: string,
-    @Body() updateFacultyDto: UpdateFacultyDto,
-  ) {
+  update(@Param('id') id: string, @Body() updateFacultyDto: UpdateFacultyDto) {
     return this.facultiesService.update(+id, updateFacultyDto);
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string) {
+  remove(@Param('id') id: string) {
     return this.facultiesService.remove(+id);
   }
 }

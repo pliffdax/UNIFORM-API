@@ -5,9 +5,16 @@ import { UsersModule } from './StaticData/users/users.module';
 import { ProfileModule } from './StaticData/profiles/profile.module';
 import { CategoriesModule } from '@/StaticData/categories/categories.module';
 import { RolesModule } from '@/StaticData/roles/roles.module';
+import { FacultiesModule } from '@/StaticData/faculties/faculties.module';
 
 @Module({
-  imports: [UsersModule, ProfileModule, RolesModule, CategoriesModule],
+  imports: [
+    UsersModule, 
+    ProfileModule, 
+    RolesModule, 
+    CategoriesModule,
+    FacultiesModule
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
