@@ -22,6 +22,9 @@ model User {
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
   profile   UserProfile?
+
+  answers   Answer[]
+  questions Question[]
 }
 
 model UserProfile {
@@ -39,4 +42,40 @@ model UserProfile {
   status    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Answer {
+  id              Int      @id @default(autoincrement())
+  answerText      String
+  shareUrl        String?
+  likes           Int      @default(0)
+  acceptedAnswer  Boolean  @default(false)
+  category        String
+
+  questionId      Int
+  question        Question @relation(fields: [questionId], references: [id])
+
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+}
+
+model Question {
+  id            Int      @id @default(autoincrement())
+  questionName  String   @db.VarChar(255)
+  questionText  String
+  likes         Int      @default(0)
+  shareUrl      String?
+  category      String
+  status        String
+
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+
+  answers       Answer[]
+
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
 }
