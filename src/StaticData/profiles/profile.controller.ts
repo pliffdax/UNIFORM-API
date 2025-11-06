@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Param, Body } from '@nestjs/common';
 import { ProfileService } from './profile.service';
-import { Prisma } from '../../generated/prisma';
+import { Prisma } from '@prisma/client';
 
 @Controller('profiles')
 export class ProfileController {

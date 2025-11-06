@@ -8,7 +8,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { User, Prisma } from '../../generated/prisma';
+import { User, Prisma } from '@prisma/client';
 
 @Controller('users')
 export class UsersController {
@@ -38,7 +38,7 @@ export class UsersController {
   }
 
   @Delete(':id')
-  async deleteUser(@Param('id') id: string): Promise<void> {
+  async deleteUser(@Param('id') id: string): Promise<User> {
     return this.usersService.remove(Number(id));
   }
 }

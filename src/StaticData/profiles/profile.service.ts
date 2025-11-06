@@ -1,9 +1,10 @@
-import { UserProfile, Prisma, PrismaClient } from '../../generated/prisma';
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { UserProfile, Prisma } from '@prisma/client';
+import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class ProfileService {
-  constructor(private prisma: PrismaClient) {}
+  constructor(private prisma: PrismaService) {}
 
   async getAllProfiles(): Promise<UserProfile[]> {
     return this.prisma.userProfile.findMany();
@@ -36,6 +37,7 @@ export class ProfileService {
     if (!profile) {
       throw new NotFoundException(`Profile for User ID ${userId} not found`);
     }
+    return profile;
   }
 
   async updateProfile(
