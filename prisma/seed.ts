@@ -9,7 +9,7 @@ async function main() {
     create: {
       username: 'admin',
       email: 'admin@example.com',
-      password: 'adminpass123', // ⚠️ здесь обычно кладут bcrypt-хэш
+      password: 'adminpass123',
       isStaff: true,
       profile: {
         create: {

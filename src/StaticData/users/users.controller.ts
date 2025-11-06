@@ -21,7 +21,7 @@ export class UsersController {
 
   @Get(':id')
   async getUserById(@Param('id') id: string): Promise<User> {
-    return this.usersService.findOne(Number(id));
+    return this.usersService.findOne(id);
   }
 
   @Post()
@@ -34,11 +34,11 @@ export class UsersController {
     @Param('id') id: string,
     @Body() user: Partial<User>,
   ): Promise<User> {
-    return this.usersService.update(Number(id), user);
+    return this.usersService.update(id, user);
   }
 
   @Delete(':id')
   async deleteUser(@Param('id') id: string): Promise<User> {
-    return this.usersService.remove(Number(id));
+    return this.usersService.remove(id);
   }
 }
