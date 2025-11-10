@@ -76,6 +76,7 @@ model Question {
 
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
+}
 
 model Faculty {
   id           Int           @id @default(autoincrement())
