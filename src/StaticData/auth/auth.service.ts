@@ -3,6 +3,7 @@ import {
   ConflictException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { RegisterDto } from './dto/register.dto';
@@ -10,7 +11,19 @@ import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private jwtService: JwtService,
+  ) {}
+
+  private generateTokens(userId: string, email: string) {
+    const payload = { sub: userId, email };
+
+    return {
+      accessToken: this.jwtService.sign(payload),
+      refreshToken: this.jwtService.sign(payload, { expiresIn: '30d' }),
+    };
+  }
 
   async register(data: RegisterDto) {
     const existing = await this.prisma.user.findFirst({
@@ -41,9 +54,12 @@ export class AuthService {
       },
     });
 
+    const tokens = this.generateTokens(user.id, user.email);
+
     return {
       message: 'User registered successfully',
       user,
+      ...tokens,
     };
   }
 
@@ -65,9 +81,12 @@ export class AuthService {
 
     const { password, ...userWithoutPassword } = user;
 
+    const tokens = this.generateTokens(user.id, user.email);
+
     return {
       message: 'Login successful',
       user: userWithoutPassword,
+      ...tokens,
     };
   }
 }
