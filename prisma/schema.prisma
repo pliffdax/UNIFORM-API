@@ -19,6 +19,9 @@ model User {
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
   profile   UserProfile?
+
+  // Обратная сторона связи с файлами
+  files File[] @relation("UserFiles")
 }
 
 model UserProfile {
@@ -45,4 +48,17 @@ model Faculty {
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   userProfiles UserProfile[]
+}
+
+model File {
+  id         String   @id @default(cuid())
+  name       String
+  mimeType   String
+  size       Int
+  url        String
+  previewUrl String?
+  ownerId    String?
+  owner      User?    @relation("UserFiles", fields: [ownerId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
