@@ -13,10 +13,11 @@ async function bootstrap() {
     .build();
 
   app.enableCors({
-    origin: ['http://localhost:3000', 'https://uniform-web-jcai.onrender.com'],
+    origin: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+    exposedHeaders: ['Authorization'],
   });
 
   const document = SwaggerModule.createDocument(app, config);
