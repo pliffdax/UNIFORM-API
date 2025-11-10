@@ -13,7 +13,6 @@ export class AuthService {
   constructor(private prisma: PrismaService) {}
 
   async register(data: RegisterDto) {
-    // Проверка существования
     const existing = await this.prisma.user.findFirst({
       where: {
         OR: [{ email: data.email }, { username: data.username }],
@@ -24,10 +23,8 @@ export class AuthService {
       throw new ConflictException('User already exists');
     }
 
-    // Хешируем пароль
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
-    // Создаём user + profile
     const user = await this.prisma.user.create({
       data: {
         username: data.username,
@@ -38,7 +35,7 @@ export class AuthService {
           create: {
             firstName: data.firstName,
             lastName: data.lastName,
-            role: data.role || 2, // дефолтная роль студента
+            role: data.role || 2,
             group: data.group,
             faculty: data.faculty,
             questions: 0,
@@ -53,7 +50,6 @@ export class AuthService {
         email: true,
         isStaff: true,
         profile: true,
-        // НЕ включаем password в ответ!
       },
     });
 
@@ -64,7 +60,6 @@ export class AuthService {
   }
 
   async login(data: LoginDto) {
-    // Найти user
     const user = await this.prisma.user.findUnique({
       where: { email: data.email },
       include: { profile: true },
@@ -74,15 +69,12 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    // Проверить пароль
     const isPasswordValid = await bcrypt.compare(data.password, user.password);
 
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    // Здесь можно генерировать JWT токен
-    // Пока просто возвращаем user без пароля
     const { password, ...userWithoutPassword } = user;
 
     return {

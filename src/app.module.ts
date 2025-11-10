@@ -8,16 +8,18 @@ import { RolesModule } from '@/StaticData/roles/roles.module';
 import { QuestionsModule } from '@/StaticData/question/question.module';
 import { AnswersModule } from '@/StaticData/answer/answer.module';
 import { FacultiesModule } from '@/StaticData/faculties/faculties.module';
+import { AuthModule } from '@/StaticData/auth/auth.module';
 
 @Module({
   imports: [
+    AuthModule,
     UsersModule,
     ProfileModule,
     RolesModule,
     CategoriesModule,
     QuestionsModule,
     AnswersModule,
-    FacultiesModule
+    FacultiesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
