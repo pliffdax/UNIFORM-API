@@ -27,7 +27,7 @@ import { PrismaService } from '../prisma/prisma.service';
   providers: [
     AppService,
     NotificationsGateway, // <- для WS /notifications
-    PrismaService,        // <- Prisma клиент как провайдер
+    PrismaService, // <- Prisma клиент как провайдер
   ],
 })
 export class AppModule {}
