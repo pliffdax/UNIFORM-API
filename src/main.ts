@@ -12,6 +12,13 @@ async function bootstrap() {
     .addBearerAuth()
     .build();
 
+  app.enableCors({
+    origin: ['http://localhost:3000', 'https://uniform-web-jcai.onrender.com'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  });
+
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger', app, document);
 
