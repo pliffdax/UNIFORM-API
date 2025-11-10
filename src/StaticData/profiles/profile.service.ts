@@ -10,9 +10,9 @@ export class ProfileService {
     return this.prisma.userProfile.findMany();
   }
 
-  async getProfileById(id: number): Promise<UserProfile> {
+  async getProfileById(id: string): Promise<UserProfile> {
     const profile = await this.prisma.userProfile.findUnique({
-      where: { id: 'id' },
+      where: { id },
     });
 
     if (!profile) {
@@ -30,9 +30,9 @@ export class ProfileService {
     });
   }
 
-  async getProfileByUserId(userId: number): Promise<UserProfile> {
+  async getProfileByUserId(userId: string): Promise<UserProfile> {
     const profile = await this.prisma.userProfile.findUnique({
-      where: { userId: 'userId' },
+      where: { userId },
     });
     if (!profile) {
       throw new NotFoundException(`Profile for User ID ${userId} not found`);
@@ -41,12 +41,12 @@ export class ProfileService {
   }
 
   async updateProfile(
-    id: number,
+    id: string,
     data: Prisma.UserProfileUpdateInput,
   ): Promise<UserProfile> {
     try {
       return await this.prisma.userProfile.update({
-        where: { id: 'id' },
+        where: { id },
         data,
       });
     } catch (error) {
@@ -54,10 +54,10 @@ export class ProfileService {
     }
   }
 
-  async deleteProfile(id: number): Promise<UserProfile> {
+  async deleteProfile(id: string): Promise<UserProfile> {
     try {
       return await this.prisma.userProfile.delete({
-        where: { id: 'id' },
+        where: { id },
       });
     } catch (error) {
       throw new NotFoundException(`Profile with ID ${id} not found`);

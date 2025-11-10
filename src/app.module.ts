@@ -7,6 +7,7 @@ import { CategoriesModule } from '@/StaticData/categories/categories.module';
 import { RolesModule } from '@/StaticData/roles/roles.module';
 import { QuestionsModule } from '@/StaticData/question/question.module';
 import { AnswersModule } from '@/StaticData/answer/answer.module';
+import { FacultiesModule } from '@/StaticData/faculties/faculties.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AnswersModule } from '@/StaticData/answer/answer.module';
     CategoriesModule,
     QuestionsModule,
     AnswersModule,
+    FacultiesModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,81 +1,38 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import {
-  CreateFacultyDto,
-  UpdateFacultyDto,
-  Faculty,
-} from './faculties.interface';
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../../prisma/prisma.service';  // Змінено шлях
+import { CreateFacultyDto, UpdateFacultyDto } from './faculties.interface';
+import {Prisma, Faculty } from '@prisma/client';
 
 @Injectable()
 export class FacultiesService {
-  private faculties: Faculty[] = [];
-  private nextId = 1;
+  constructor(private prisma: PrismaService) {}
 
-  findAll(query?: any): Faculty[] {
-    let result = this.faculties;
-
-    if (query?.name) {
-      result = result.filter((faculty) =>
-        faculty.name.toLowerCase().includes(query.name.toLowerCase()),
-      );
-    }
-
-    if (query?.code) {
-      result = result.filter((faculty) =>
-        faculty.code.toLowerCase().includes(query.code.toLowerCase()),
-      );
-    }
-
-    return result;
+  async findAll() {
+    return this.prisma.faculty.findMany();
   }
 
-  findOne(id: number): Faculty {
-    const faculty = this.faculties.find((faculty) => faculty.id === id);
-    if (!faculty) {
-      throw new NotFoundException(`Faculty with ID ${id} not found`);
-    }
-    return faculty;
+  async findOne(id: number) {
+    return this.prisma.faculty.findUnique({
+      where: { id }
+    });
   }
 
-  create(createFacultyDto: CreateFacultyDto): Faculty {
-    const faculty: Faculty = {
-      id: this.nextId++,
-      ...createFacultyDto,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-
-    this.faculties.push(faculty);
-    return faculty;
+  async create(createFacultyDto: CreateFacultyDto) {
+    return this.prisma.faculty.create({
+      data: createFacultyDto
+    });
   }
 
-  update(id: number, updateFacultyDto: UpdateFacultyDto): Faculty {
-    const facultyIndex = this.faculties.findIndex(
-      (faculty) => faculty.id === id,
-    );
-    if (facultyIndex === -1) {
-      throw new NotFoundException(`Faculty with ID ${id} not found`);
-    }
-
-    const updatedFaculty = {
-      ...this.faculties[facultyIndex],
-      ...updateFacultyDto,
-      updatedAt: new Date(),
-    };
-
-    this.faculties[facultyIndex] = updatedFaculty;
-    return updatedFaculty;
+  async update(id: number, updateFacultyDto: UpdateFacultyDto) {
+    return this.prisma.faculty.update({
+      where: { id },
+      data: updateFacultyDto
+    });
   }
 
-  remove(id: number): Faculty {
-    const facultyIndex = this.faculties.findIndex(
-      (faculty) => faculty.id === id,
-    );
-    if (facultyIndex === -1) {
-      throw new NotFoundException(`Faculty with ID ${id} not found`);
-    }
-
-    const removedFaculty = this.faculties[facultyIndex];
-    this.faculties.splice(facultyIndex, 1);
-    return removedFaculty;
+  async remove(id: number) {
+    return this.prisma.faculty.delete({
+      where: { id }
+    });
   }
 }

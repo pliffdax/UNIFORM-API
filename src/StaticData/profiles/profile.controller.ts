@@ -12,13 +12,13 @@ export class ProfileController {
   }
 
   @Get(':id')
-  getProfileById(@Param('id') id: number) {
-    return this.profileService.getProfileById(Number(id));
+  getProfileById(@Param('id') id: string) {
+    return this.profileService.getProfileById(id);
   }
 
   @Get('user/:userId')
-  getProfileByUserId(@Param('userId') userId: number) {
-    return this.profileService.getProfileByUserId(Number(userId));
+  getProfileByUserId(@Param('userId') userId: string) {
+    return this.profileService.getProfileByUserId(userId);
   }
 
   @Post('create')
@@ -28,15 +28,15 @@ export class ProfileController {
 
   @Post('update/:id')
   updateProfile(
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Body() updatedProfile: Prisma.UserProfileUpdateInput,
   ) {
-    return this.profileService.updateProfile(Number(id), updatedProfile);
+    return this.profileService.updateProfile(id, updatedProfile);
   }
 
   @Post('delete/:id')
-  deleteProfile(@Param('id') id: number) {
-    this.profileService.deleteProfile(Number(id));
+  deleteProfile(@Param('id') id: string) {
+    this.profileService.deleteProfile(id);
     return { message: `Profile with ID ${id} deleted successfully` };
   }
 }
