@@ -1,4 +1,4 @@
-import { PrismaClient } from '../src/generated/prisma';
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -17,7 +17,6 @@ async function main() {
           lastName: '',
           role: 1,
           group: 'IO-35',
-          faculty: 10,
           questions: 0,
           answers: 0,
           avatarUrl: null,
@@ -41,7 +40,6 @@ async function main() {
           lastName: 'Ivanov',
           role: 2,
           group: 'CS-21',
-          faculty: 12,
           questions: 5,
           answers: 2,
           avatarUrl: 'https://example.com/avatar.png',

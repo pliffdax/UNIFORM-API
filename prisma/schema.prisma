@@ -32,8 +32,8 @@ model UserProfile {
   lastName  String
   role      Int
   group     String
-  facultyId Int
-  faculty   Faculty  @relation(fields: [facultyId], references: [id])
+  facultyId Int?
+  faculty   Faculty?  @relation(fields: [facultyId], references: [id])
   questions Int
   answers   Int
   avatarUrl String?

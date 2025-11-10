@@ -27,22 +27,10 @@ export class AuthService {
 
     const user = await this.prisma.user.create({
       data: {
-        username: data.username,
+        username: data.username || '',
         email: data.email,
         password: hashedPassword,
         isStaff: false,
-        profile: {
-          create: {
-            firstName: data.firstName,
-            lastName: data.lastName,
-            role: data.role || 2,
-            group: data.group,
-            faculty: data.faculty,
-            questions: 0,
-            answers: 0,
-            status: 'active',
-          },
-        },
       },
       select: {
         id: true,

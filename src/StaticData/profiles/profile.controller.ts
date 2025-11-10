@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Param, Body } from '@nestjs/common';
 import { ProfileService } from './profile.service';
-import { Prisma } from '@prisma/client';
+import { Prisma, UserProfile } from '@prisma/client';
+import { CompleteProfileDto } from './dto/complete-profile.dto';
 
 @Controller('profiles')
 export class ProfileController {
@@ -21,9 +22,14 @@ export class ProfileController {
     return this.profileService.getProfileByUserId(userId);
   }
 
+  @Post('complete')
+  async completeProfile(@Body() data: CompleteProfileDto) {
+    return this.profileService.createProfile(data);
+  }
+
   @Post('create')
-  createProfile(@Body() newProfile: Prisma.UserProfileCreateInput) {
-    return this.profileService.createProfile(newProfile);
+  async createProfile(data: CompleteProfileDto): Promise<UserProfile> {
+    return this.profileService.createProfile(data);
   }
 
   @Post('update/:id')

@@ -1,6 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UserProfile, Prisma } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
+import { CompleteProfileDto } from './dto/complete-profile.dto';
+import { ConflictException } from '@nestjs/common';
 
 @Injectable()
 export class ProfileService {
@@ -22,14 +24,6 @@ export class ProfileService {
     return profile;
   }
 
-  async createProfile(
-    data: Prisma.UserProfileCreateInput,
-  ): Promise<UserProfile> {
-    return this.prisma.userProfile.create({
-      data,
-    });
-  }
-
   async getProfileByUserId(userId: string): Promise<UserProfile> {
     const profile = await this.prisma.userProfile.findUnique({
       where: { userId },
@@ -38,6 +32,30 @@ export class ProfileService {
       throw new NotFoundException(`Profile for User ID ${userId} not found`);
     }
     return profile;
+  }
+
+  async createProfile(data: CompleteProfileDto) {
+    const existing = await this.prisma.userProfile.findUnique({
+      where: { userId: data.userId },
+    });
+
+    if (existing) {
+      throw new ConflictException('Profile already exists');
+    }
+
+    return this.prisma.userProfile.create({
+      data: {
+        userId: data.userId,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        group: data.group,
+        role: data.role || 2,
+        questions: 0,
+        answers: 0,
+        status: 'active',
+      },
+      include: { user: true },
+    });
   }
 
   async updateProfile(
