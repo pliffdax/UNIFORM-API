@@ -75,6 +75,11 @@ export class AuthService {
 
     const isPasswordValid = await bcrypt.compare(data.password, user.password);
 
+    console.log('🔐 Email:', data.email);
+    console.log('🔐 Введённый пароль:', data.password);
+    console.log('🔐 Хэш из БД:', user.password);
+    console.log('✅ Пароль валиден?', isPasswordValid);
+
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid credentials');
     }
