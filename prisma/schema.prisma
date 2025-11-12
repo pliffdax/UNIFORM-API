@@ -85,3 +85,19 @@ model Faculty {
   updatedAt    DateTime      @updatedAt
   userProfiles UserProfile[]
 }
+
+model Role {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+}
+
+model Category {
+  id         Int      @id @default(autoincrement())
+  name       String   @unique
+  slug       String   @unique
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
