@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String       @id @default(cuid())
+  username  String       @unique
+  email     String       @unique
+  password  String
+  isStaff   Boolean      @default(false)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  profile   UserProfile?
+
+  answers   Answer[]
+  questions Question[]
+}
+
+model UserProfile {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  firstName String
+  lastName  String
+  role      Int
+  group     String
+  facultyId Int?
+  faculty   Faculty?  @relation(fields: [facultyId], references: [id])
+  questions Int
+  answers   Int
+  avatarUrl String?
+  status    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Answer {
+  id              Int      @id @default(autoincrement())
+  answerText      String
+  shareUrl        String?
+  likes           Int      @default(0)
+  acceptedAnswer  Boolean  @default(false)
+  category        String
+
+  questionId      Int
+  question        Question @relation(fields: [questionId], references: [id])
+
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+}
+
+model Question {
+  id            Int      @id @default(autoincrement())
+  questionName  String   @db.VarChar(255)
+  questionText  String
+  likes         Int      @default(0)
+  shareUrl      String?
+  category      String
+  status        String
+
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+
+  answers       Answer[]
+
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+}
+
+model Faculty {
+  id           Int           @id @default(autoincrement())
+  name         String        @unique
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  userProfiles UserProfile[]
+}
+
+model Role {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+}
+
+model Category {
+  id         Int      @id @default(autoincrement())
+  name       String   @unique
+  slug       String   @unique
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}

@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: uniflow_user
+      POSTGRES_PASSWORD: uniflow_password
+      POSTGRES_DB: uniflow_db
+    ports:
+      - "5430:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U uniflow_user -d uniflow_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: .
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: "postgresql://uniflow_user:uniflow_password@db:5432/uniflow_db"
+      PORT: 3000
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db_data:
