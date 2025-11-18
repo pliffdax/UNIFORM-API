@@ -26,7 +26,7 @@ export class QuestionsController {
 
   @Post()
   async createQuestion(
-    @Body() question: Prisma.QuestionCreateInput,
+    @Body() question: Prisma.QuestionCreateInput & { userid: string },
   ): Promise<Question> {
     return this.questionsService.create(question);
   }
