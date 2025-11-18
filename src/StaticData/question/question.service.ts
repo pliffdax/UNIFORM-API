@@ -20,7 +20,9 @@ export class QuestionsService {
     return question;
   }
 
-  async create(data: Prisma.QuestionCreateInput): Promise<Question> {
+  async create(
+    data: Prisma.QuestionCreateInput & { userid: string },
+  ): Promise<Question> {
     const { userid, ...rest } = data;
 
     return this.prisma.question.create({
