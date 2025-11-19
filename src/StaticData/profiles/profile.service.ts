@@ -67,7 +67,7 @@ export class ProfileService {
         where: { id },
         data,
       });
-    } catch (error) {
+    } catch {
       throw new NotFoundException(`Profile with ID ${id} not found`);
     }
   }
@@ -77,7 +77,7 @@ export class ProfileService {
       return await this.prisma.userProfile.delete({
         where: { id },
       });
-    } catch (error) {
+    } catch {
       throw new NotFoundException(`Profile with ID ${id} not found`);
     }
   }

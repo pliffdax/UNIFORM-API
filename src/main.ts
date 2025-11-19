@@ -31,4 +31,4 @@ async function bootstrap() {
     `📘 Swagger available at http://localhost:${process.env.PORT ?? 3000}/swagger`,
   );
 }
-bootstrap();
+void bootstrap();

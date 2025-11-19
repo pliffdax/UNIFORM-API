@@ -41,8 +41,8 @@ export class ProfileController {
   }
 
   @Post('delete/:id')
-  deleteProfile(@Param('id') id: string) {
-    this.profileService.deleteProfile(id);
+  async deleteProfile(@Param('id') id: string) {
+    await this.profileService.deleteProfile(id);
     return { message: `Profile with ID ${id} deleted successfully` };
   }
 }

@@ -37,10 +37,14 @@ export class CategoriesService {
     data: Prisma.CategoryUpdateInput,
   ): Promise<Category> {
     await this.findOne(id);
+
     const payload: Prisma.CategoryUpdateInput = {
       ...data,
-      ...(data.name && !data.slug ? { slug: toSlug(String(data.name)) } : {}),
+      ...(typeof data.name === 'string' && !data.slug
+        ? { slug: toSlug(data.name) }
+        : {}),
     };
+
     return this.prisma.category.update({
       where: { id },
       data: payload,

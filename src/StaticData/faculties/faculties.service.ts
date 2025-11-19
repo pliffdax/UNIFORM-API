@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service'; // Змінено шлях
+import { PrismaService } from '../../prisma/prisma.service';
 import { CreateFacultyDto, UpdateFacultyDto } from './faculties.interface';
-import { Prisma, Faculty } from '@prisma/client';
 
 @Injectable()
 export class FacultiesService {
