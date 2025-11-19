@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+} from '@nestjs/common';
 import { FacultiesService } from './faculties.service';
 import { CreateFacultyDto, UpdateFacultyDto } from './faculties.interface';
 
