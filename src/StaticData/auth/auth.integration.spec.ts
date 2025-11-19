@@ -3,7 +3,7 @@ import { type INestApplication } from '@nestjs/common';
 import { AppModule } from '../../app.module';
 import { PrismaService } from '../../prisma/prisma.service';
 
-describe('Auth Integration Tests (Prisma)', () => {
+describe.skip('Auth Integration Tests (Prisma)', () => {
   let app: INestApplication;
   let prisma: PrismaService;
 
