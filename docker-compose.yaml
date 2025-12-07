@@ -2,6 +2,10 @@ services:
   db:
     image: postgres:15
     restart: always
+    command:
+      - "postgres"
+      - "-c"
+      - "shared_preload_libraries=pg_stat_statements"
     environment:
       POSTGRES_USER: uniflow_user
       POSTGRES_PASSWORD: uniflow_password
