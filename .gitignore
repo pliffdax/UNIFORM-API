@@ -62,3 +62,19 @@ reports
 
 # DAX CLI
 code_dump.md
+
+# profiler / clinic
+.clinic/
+*.cpuprofile
+isolate-*.log
+
+# artifacts (лучше игнорить всё и потом "форсить" нужное)
+artifacts/*
+!artifacts/.gitkeep
+!artifacts/k6-output.txt
+!artifacts/k6-summary.json
+!artifacts/lighthouse.swagger.html
+!artifacts/lighthouse.swagger.json
+!artifacts/db-top-queries.txt
+!artifacts/explain-1.txt
+!artifacts/api-log.txt
