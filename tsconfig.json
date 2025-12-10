@@ -1,11 +1,13 @@
 {
-  "include": ["src", "test", "commitlint.config.mjs"],
+  "include": ["src", "test", "packages/*/src/**/*.ts", "commitlint.config.mjs"],
   "compilerOptions": {
     "module": "commonjs",
     "target": "ES2020",
 
     "baseUrl": ".",
-    "paths": { "@/*": ["src/*"] },
+    "paths": {
+      "@/*": ["src/*"]
+    },
 
     "rootDir": "src",
     "outDir": "dist",
