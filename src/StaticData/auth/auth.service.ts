@@ -1,93 +1,61 @@
 import {
+  Inject,
   Injectable,
   ConflictException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from '../../prisma/prisma.service';
-import * as bcrypt from 'bcrypt';
+import { AUTH_CORE } from './auth-core.provider';
+import {
+  AuthCore,
+  UserAlreadyExistsError,
+  InvalidCredentialsError,
+} from 'auth-lib';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private prisma: PrismaService,
-    private jwtService: JwtService,
-  ) {}
-
-  private generateTokens(userId: string, email: string) {
-    const payload = { sub: userId, email };
-
-    return {
-      accessToken: this.jwtService.sign(payload),
-      refreshToken: this.jwtService.sign(payload, { expiresIn: '30d' }),
-    };
-  }
+  constructor(@Inject(AUTH_CORE) private readonly core: AuthCore) {}
 
   async register(data: RegisterDto) {
-    const existing = await this.prisma.user.findFirst({
-      where: {
-        OR: [{ email: data.email }, { username: data.username }],
-      },
-    });
-
-    if (existing) {
-      throw new ConflictException('User already exists');
-    }
-
-    const hashedPassword = await bcrypt.hash(data.password, 10);
-
-    const user = await this.prisma.user.create({
-      data: {
+    try {
+      const result = await this.core.register({
         username: data.username || '',
         email: data.email,
-        password: hashedPassword,
+        password: data.password,
         isStaff: false,
-      },
-      select: {
-        id: true,
-        username: true,
-        email: true,
-        isStaff: true,
-        profile: true,
-      },
-    });
+      });
 
-    const tokens = this.generateTokens(user.id, user.email);
-
-    return {
-      message: 'User registered successfully',
-      user,
-      ...tokens,
-    };
+      return {
+        message: 'User registered successfully',
+        user: result.user,
+        ...result.tokens,
+      };
+    } catch (e) {
+      if (e instanceof UserAlreadyExistsError) {
+        throw new ConflictException('User already exists');
+      }
+      throw e;
+    }
   }
 
   async login(data: LoginDto) {
-    const user = await this.prisma.user.findUnique({
-      where: { email: data.email },
-      include: { profile: true },
-    });
+    try {
+      const result = await this.core.login({
+        emailOrUsername: data.email,
+        password: data.password,
+      });
 
-    if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      return {
+        message: 'Login successful',
+        user: result.user,
+        ...result.tokens,
+      };
+    } catch (e) {
+      if (e instanceof InvalidCredentialsError) {
+        throw new UnauthorizedException('Invalid credentials');
+      }
+      throw e;
     }
-
-    const isPasswordValid = await bcrypt.compare(data.password, user.password);
-
-    if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
-
-    const { password: _password, ...userWithoutPassword } = user;
-    void _password;
-
-    const tokens = this.generateTokens(user.id, user.email);
-
-    return {
-      message: 'Login successful',
-      user: userWithoutPassword,
-      ...tokens,
-    };
   }
 }
