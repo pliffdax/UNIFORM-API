@@ -1,6 +1,8 @@
 # compiled output
 /dist
+**/dist/
 /node_modules
+**/node_modules/
 /build
 
 # Logs
@@ -14,6 +16,8 @@ lerna-debug.log*
 
 # OS
 .DS_Store
+**/.DS_Store
+Thumbs.db
 
 # Tests
 /coverage
@@ -69,12 +73,14 @@ code_dump.md
 isolate-*.log
 
 # artifacts (лучше игнорить всё и потом "форсить" нужное)
-artifacts/*
+!artifacts/k6-summary*.json
+!artifacts/k6-output*.txt
+!artifacts/db-top-queries*.txt
+!artifacts/lighthouse*.json
+!artifacts/*.md
 !artifacts/.gitkeep
-!artifacts/k6-output.txt
-!artifacts/k6-summary.json
-!artifacts/lighthouse.swagger.html
-!artifacts/lighthouse.swagger.json
-!artifacts/db-top-queries.txt
-!artifacts/explain-1.txt
-!artifacts/api-log.txt
+
+# Still ignore heavy/unstable artifacts even if present:
+artifacts/*.cpuprofile
+artifacts/*.html
+artifacts/*.log
