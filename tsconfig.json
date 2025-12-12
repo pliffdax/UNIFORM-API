@@ -1,5 +1,5 @@
 {
-  "include": ["src", "test", "packages/*/src/**/*.ts", "commitlint.config.mjs"],
+  "include": ["src", "test", "commitlint.config.mjs"],
   "compilerOptions": {
     "module": "commonjs",
     "target": "ES2020",
