@@ -8,7 +8,9 @@ export default defineConfig([
   {
     ignores: [
       'dist/**',
+      '**/dist/**',
       'node_modules/**',
+      '**/node_modules/**',
       'coverage/**',
       'prisma/**',
       'src/generated/**',
@@ -22,7 +24,7 @@ export default defineConfig([
     languageOptions: {
       parser: tseslint.parser,
       parserOptions: {
-        project: './tsconfig.json',
+        project: './tsconfig.eslint.json',
         sourceType: 'module',
         ecmaVersion: 'latest',
       },

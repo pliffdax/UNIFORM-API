@@ -1,32 +1,34 @@
 import { Test, type TestingModule } from '@nestjs/testing';
+import { ConflictException, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+
 import { AuthService } from './auth.service';
 import { PrismaService } from '../../prisma/prisma.service';
-import { JwtService } from '@nestjs/jwt';
-import { UnauthorizedException } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
+import { AUTH_CORE } from './auth-core.provider';
+
+import type { AuthCore } from 'auth-lib';
+import { InvalidCredentialsError, UserAlreadyExistsError } from 'auth-lib';
+
+type AuthCoreFacade = Pick<AuthCore, 'register' | 'login'>;
 
 describe('AuthService', () => {
   let service: AuthService;
 
-  const mockPrismaService = {
-    user: {
-      findFirst: jest.fn(),
-      findUnique: jest.fn(),
-      create: jest.fn(),
-    },
-    userProfile: {
-      create: jest.fn(),
-    },
-  };
+  const mockPrismaService: Partial<PrismaService> = {};
+  const mockJwtService: Partial<JwtService> = {};
 
-  const mockJwtService = {
-    sign: jest.fn(),
-  };
+  let mockAuthCore: jest.Mocked<AuthCoreFacade>;
 
   beforeEach(async () => {
+    mockAuthCore = {
+      register: jest.fn(),
+      login: jest.fn(),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AuthService,
+        { provide: AUTH_CORE, useValue: mockAuthCore },
         { provide: PrismaService, useValue: mockPrismaService },
         { provide: JwtService, useValue: mockJwtService },
       ],
@@ -40,78 +42,108 @@ describe('AuthService', () => {
   });
 
   describe('register', () => {
-    it('should create a new user and profile', async () => {
-      const registerDto = { email: 'test@test.com', password: '123456' };
-      const hashedPassword = await bcrypt.hash(registerDto.password, 10);
-      const mockUser = {
-        id: '1',
-        email: registerDto.email,
-        password: hashedPassword,
+    it('should return message + user + tokens (flattened)', async () => {
+      const registerDto = {
+        email: 'test@test.com',
+        password: '123456',
         username: 'test_123',
-        isStaff: false,
-        profile: null,
       };
 
-      mockPrismaService.user.findFirst.mockResolvedValue(null);
-      mockPrismaService.user.create.mockResolvedValue(mockUser);
-      mockJwtService.sign.mockReturnValue('mocked_token');
+      mockAuthCore.register.mockResolvedValue({
+        user: {
+          id: '1',
+          email: registerDto.email,
+          username: registerDto.username,
+          isStaff: false,
+        },
+        tokens: {
+          accessToken: 'access',
+          refreshToken: 'refresh',
+        },
+      });
 
       const result = await service.register(registerDto);
 
-      expect(result).toHaveProperty('accessToken');
-      expect(result).toHaveProperty('refreshToken');
-      expect(mockPrismaService.user.create).toHaveBeenCalled();
+      expect(result).toEqual({
+        message: 'User registered successfully',
+        user: {
+          id: '1',
+          email: registerDto.email,
+          username: registerDto.username,
+          isStaff: false,
+        },
+        accessToken: 'access',
+        refreshToken: 'refresh',
+      });
+
+      expect(mockAuthCore.register).toHaveBeenCalledTimes(1);
+      expect(mockAuthCore.register).toHaveBeenCalledWith({
+        username: registerDto.username,
+        email: registerDto.email,
+        password: registerDto.password,
+        isStaff: false,
+      });
     });
 
-    it('should throw error if user already exists', async () => {
-      const registerDto = { email: 'test@test.com', password: '123456' };
-      mockPrismaService.user.findFirst.mockResolvedValue({ id: '1' });
+    it('should throw ConflictException if core throws UserAlreadyExistsError', async () => {
+      const registerDto = {
+        email: 'test@test.com',
+        password: '123456',
+        username: 'test_123',
+      };
 
-      await expect(service.register(registerDto)).rejects.toThrow();
+      mockAuthCore.register.mockRejectedValue(new UserAlreadyExistsError());
+
+      await expect(service.register(registerDto)).rejects.toBeInstanceOf(
+        ConflictException,
+      );
     });
   });
 
   describe('login', () => {
-    it('should return tokens for valid credentials', async () => {
+    it('should return message + user + tokens (flattened)', async () => {
       const loginDto = { email: 'test@test.com', password: '123456' };
-      const hashedPassword = await bcrypt.hash(loginDto.password, 10);
-      const mockUser = {
-        id: '1',
-        email: loginDto.email,
-        password: hashedPassword,
-        profile: null,
-      };
 
-      mockPrismaService.user.findUnique.mockResolvedValue(mockUser);
-      mockJwtService.sign.mockReturnValue('mock-token');
+      mockAuthCore.login.mockResolvedValue({
+        user: {
+          id: '1',
+          email: loginDto.email,
+          username: 'test_123',
+          isStaff: false,
+        },
+        tokens: {
+          accessToken: 'access',
+          refreshToken: 'refresh',
+        },
+      });
 
       const result = await service.login(loginDto);
 
-      expect(result).toHaveProperty('accessToken');
-      expect(result).toHaveProperty('refreshToken');
+      expect(result).toEqual({
+        message: 'Login successful',
+        user: {
+          id: '1',
+          email: loginDto.email,
+          username: 'test_123',
+          isStaff: false,
+        },
+        accessToken: 'access',
+        refreshToken: 'refresh',
+      });
+
+      expect(mockAuthCore.login).toHaveBeenCalledTimes(1);
+      expect(mockAuthCore.login).toHaveBeenCalledWith({
+        emailOrUsername: loginDto.email,
+        password: loginDto.password,
+      });
     });
 
-    it('should throw UnauthorizedException for invalid email', async () => {
+    it('should throw UnauthorizedException if core throws InvalidCredentialsError', async () => {
       const loginDto = { email: 'wrong@test.com', password: '123456' };
-      mockPrismaService.user.findUnique.mockResolvedValue(null);
 
-      await expect(service.login(loginDto)).rejects.toThrow(
-        UnauthorizedException,
-      );
-    });
+      mockAuthCore.login.mockRejectedValue(new InvalidCredentialsError());
 
-    it('should throw UnauthorizedException for invalid password', async () => {
-      const loginDto = { email: 'test@test.com', password: 'wrongpass' };
-      const hashedPassword = await bcrypt.hash('correctpass', 10);
-      const mockUser = {
-        id: '1',
-        email: loginDto.email,
-        password: hashedPassword,
-      };
-
-      mockPrismaService.user.findUnique.mockResolvedValue(mockUser);
-
-      await expect(service.login(loginDto)).rejects.toThrow(
+      await expect(service.login(loginDto)).rejects.toBeInstanceOf(
         UnauthorizedException,
       );
     });

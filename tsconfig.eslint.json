@@ -1,0 +1,25 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "auth-lib": ["packages/auth-lib/src/index.ts"]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "test/**/*.ts",
+    "packages/*/src/**/*.ts",
+    "commitlint.config.mjs"
+  ],
+  "exclude": [
+    "dist/**",
+    "node_modules/**",
+    "packages/*/dist/**",
+    "packages/*/node_modules/**",
+    "coverage/**"
+  ]
+}

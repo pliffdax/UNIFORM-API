@@ -4,6 +4,9 @@ import { Rate } from 'k6/metrics';
 
 const errorRate = new Rate('errors');
 
+const BASE_URL = __ENV.API_URL || 'http://localhost:3000';
+const PASSWORD = __ENV.K6_PASSWORD || 'Password_123!';
+
 export const options = {
   stages: [
     { duration: '30s', target: 10 },
@@ -14,125 +17,150 @@ export const options = {
   ],
   thresholds: {
     http_req_duration: ['p(95)<500'],
-    errors: ['rate<0.1'],
+    http_req_failed: ['rate<0.02'],
+    errors: ['rate<0.02'],
   },
 };
 
-const BASE_URL = __ENV.API_URL || 'http://localhost:3000';
+function randId() {
+  return `${Date.now()}-${Math.floor(Math.random() * 1e9)}`;
+}
 
-export default function () {
-  const uniqueId = `${__VU}-${__ITER}`;
-
-  const registerPayload = JSON.stringify({
-    email: `user${uniqueId}@test.com`,
-    password: 'password123',
-    username: `user${uniqueId}`,
+function registerOnce(email, username) {
+  const payload = JSON.stringify({
+    email,
+    password: PASSWORD,
+    username,
   });
 
-  const registerRes = http.post(`${BASE_URL}/auth/register`, registerPayload, {
+  const res = http.post(`${BASE_URL}/auth/register`, payload, {
     headers: { 'Content-Type': 'application/json' },
+    tags: { name: 'POST /auth/register' },
   });
 
-  if (
-    !check(registerRes, {
-      'registration status is 201/409': (r) =>
-        r.status === 201 || r.status === 409,
-    })
-  ) {
+  const ok =
+    check(res, {
+      'register status 200/201/409': (r) =>
+        r.status === 200 || r.status === 201 || r.status === 409,
+    }) || false;
+
+  if (!ok) errorRate.add(1);
+
+  return res.status;
+}
+
+function login(email) {
+  const payload = JSON.stringify({
+    email,
+    password: PASSWORD,
+  });
+
+  const res = http.post(`${BASE_URL}/auth/login`, payload, {
+    headers: { 'Content-Type': 'application/json' },
+    tags: { name: 'POST /auth/login' },
+  });
+
+  const ok =
+    check(res, {
+      'login status 200/201': (r) => r.status === 200 || r.status === 201,
+    }) || false;
+
+  if (!ok) {
     errorRate.add(1);
+    return null;
   }
 
-  sleep(1);
-
-  const loginPayload = JSON.stringify({
-    email: `user${uniqueId}@test.com`,
-    password: 'password123',
-  });
-
-  const loginRes = http.post(`${BASE_URL}/auth/login`, loginPayload, {
-    headers: { 'Content-Type': 'application/json' },
-  });
-
-  if (
-    !check(loginRes, {
-      'login status is 200/201': (r) => r.status === 200 || r.status === 201,
-    })
-  ) {
-    errorRate.add(1);
-    return;
-  }
-
-  const loginBody = loginRes.json();
-  const token = loginBody && loginBody.accessToken;
-
+  const body = res.json();
+  const token = body && body.accessToken;
   if (!token) {
     errorRate.add(1);
-    return;
+    return null;
+  }
+
+  return token;
+}
+
+export function setup() {
+  const id = randId();
+  const email = `k6_${id}@test.local`;
+  const username = `k6_${id}`;
+
+  registerOnce(email, username);
+
+  sleep(0.2);
+
+  return { email };
+}
+
+let cachedToken = null;
+
+export default function (data) {
+  if (!cachedToken) {
+    cachedToken = login(data.email);
+    if (!cachedToken) {
+      sleep(1);
+      return;
+    }
   }
 
   const authHeaders = {
-    Authorization: `Bearer ${token}`,
+    Authorization: `Bearer ${cachedToken}`,
   };
-
-  sleep(1);
 
   const listEndpoints = ['/faculties', '/categories', '/questions', '/answers'];
 
   for (const path of listEndpoints) {
     const res = http.get(`${BASE_URL}${path}`, {
       headers: authHeaders,
+      tags: { name: `GET ${path}` },
     });
 
-    if (
-      !check(res, {
+    const ok =
+      check(res, {
         [`${path} status 200`]: (r) => r.status === 200,
-        [`${path} < 500ms`]: (r) => r.timings.duration < 500,
-      })
-    ) {
-      errorRate.add(1);
-    }
+        [`${path} p95<500ms (soft)`]: (r) => r.timings.duration < 500,
+      }) || false;
 
-    sleep(0.5);
+    if (!ok) errorRate.add(1);
+
+    sleep(0.2);
   }
 
   const profilesRes = http.get(`${BASE_URL}/profiles`, {
     headers: authHeaders,
+    tags: { name: 'GET /profiles' },
   });
 
-  if (
-    !check(profilesRes, {
+  const profilesOk =
+    check(profilesRes, {
       'profiles status 200': (r) => r.status === 200,
-    })
-  ) {
+    }) || false;
+
+  if (!profilesOk) {
     errorRate.add(1);
+    sleep(0.5);
     return;
   }
 
-  let profiles = [];
-  try {
-    profiles = profilesRes.json();
-  } catch (_e) {
-    errorRate.add(1);
-    return;
-  }
+  const profilesBody = profilesRes.json();
+  const firstProfileId =
+    Array.isArray(profilesBody) && profilesBody.length > 0
+      ? profilesBody[0]?.id
+      : null;
 
-  if (profiles && profiles.length > 0) {
-    const firstProfileId = profiles[0].id;
-
+  if (firstProfileId) {
     const profileRes = http.get(`${BASE_URL}/profiles/${firstProfileId}`, {
       headers: authHeaders,
+      tags: { name: 'GET /profiles/:id' },
     });
 
-    if (
-      !check(profileRes, {
+    const ok =
+      check(profileRes, {
         'profile by id 200': (r) => r.status === 200,
-      })
-    ) {
-      errorRate.add(1);
-    }
+      }) || false;
 
-    sleep(0.5);
+    if (!ok) errorRate.add(1);
   }
 
-  sleep(1);
+  sleep(0.5);
 }
